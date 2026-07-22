@@ -50,6 +50,9 @@ export const PersonSchema = z.object({
   citations: z.array(VerseRefSchema).default([]),
   /** Total verses mentioning this person — the notability metric. */
   verseCount: z.number().int().nonnegative(),
+  /** People-group memberships ("Kings of Judah", "Twelve Apostles") — used
+   *  for timeline lane grouping. */
+  groups: z.array(z.string()).default([]),
   /** Provenance back-links into source datasets. */
   sourceIds: z
     .object({ theographic: z.string().optional() })

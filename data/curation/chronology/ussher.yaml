@@ -1,0 +1,74 @@
+# Ussher chronology (Annales Veteris Testamenti, 1650). Spans hand-entered
+# from Ussher's dates; anchors record what the text itself states.
+layer:
+  id: ussher
+  label: "Ussher (1650)"
+  attribution: "James Ussher, Annales Veteris Testamenti (1650)"
+
+spans:
+  adam_78:         { birth: -4004, death: -3074, approx: false }
+  seth_2504:       { birth: -3874, death: -2962, approx: false }
+  enos_1193:       { birth: -3769, death: -2864, approx: false }
+  cainan_534:      { birth: -3679, death: -2769, approx: false }
+  mahalaleel_1885: { birth: -3609, death: -2714, approx: false }
+  jared_730:       { birth: -3544, death: -2582, approx: false }
+  enoch_1192:      { birth: -3382, death: -3017, approx: false }
+  methuselah_2042: { birth: -3317, death: -2348, approx: false }
+  lamech_1809:     { birth: -3130, death: -2353, approx: false }
+  noah_2210:       { birth: -2948, death: -1998, approx: false }
+  shem_2613:       { birth: -2446, death: -1846, approx: false }
+  arphaxad_312:    { birth: -2346, death: -1908, approx: false }
+  salah_2455:      { birth: -2311, death: -1878, approx: false }
+  eber_1030:       { birth: -2281, death: -1817, approx: false }
+  peleg_2308:      { birth: -2247, death: -2008, approx: false }
+  reu_2428:        { birth: -2217, death: -1978, approx: false }
+  serug_2503:      { birth: -2185, death: -1955, approx: false }
+  nahor_2142:      { birth: -2155, death: -2007, approx: false }
+  terah_2841:      { birth: -2126, death: -1921, approx: false }
+  abraham_58:      { birth: -1996, death: -1821, approx: false }
+  isaac_616:       { birth: -1896, death: -1716, approx: false }
+  israel_682:      { birth: -1836, death: -1689, approx: false }
+  david_994:       { birth: -1085, death: -1015, approx: false }
+  solomon_2762:    { birth: -1033, death: -975,  approx: true }
+
+anchors:
+  # Genesis 5 — age at fatherhood
+  - { kind: age_at_fatherhood, parent: adam_78,         child: seth_2504,       age: 130, citations: ["Gen 5:3"] }
+  - { kind: age_at_fatherhood, parent: seth_2504,       child: enos_1193,       age: 105, citations: ["Gen 5:6"] }
+  - { kind: age_at_fatherhood, parent: enos_1193,       child: cainan_534,      age: 90,  citations: ["Gen 5:9"] }
+  - { kind: age_at_fatherhood, parent: cainan_534,      child: mahalaleel_1885, age: 70,  citations: ["Gen 5:12"] }
+  - { kind: age_at_fatherhood, parent: mahalaleel_1885, child: jared_730,       age: 65,  citations: ["Gen 5:15"] }
+  - { kind: age_at_fatherhood, parent: jared_730,       child: enoch_1192,      age: 162, citations: ["Gen 5:18"] }
+  - { kind: age_at_fatherhood, parent: enoch_1192,      child: methuselah_2042, age: 65,  citations: ["Gen 5:21"] }
+  - { kind: age_at_fatherhood, parent: methuselah_2042, child: lamech_1809,     age: 187, citations: ["Gen 5:25"] }
+  - { kind: age_at_fatherhood, parent: lamech_1809,     child: noah_2210,       age: 182, citations: ["Gen 5:28-29"] }
+  # Genesis 5 — lifespans
+  - { kind: lifespan, person: adam_78,         years: 930, citations: ["Gen 5:5"] }
+  - { kind: lifespan, person: seth_2504,       years: 912, citations: ["Gen 5:8"] }
+  - { kind: lifespan, person: enos_1193,       years: 905, citations: ["Gen 5:11"] }
+  - { kind: lifespan, person: cainan_534,      years: 910, citations: ["Gen 5:14"] }
+  - { kind: lifespan, person: mahalaleel_1885, years: 895, citations: ["Gen 5:17"] }
+  - { kind: lifespan, person: jared_730,       years: 962, citations: ["Gen 5:20"] }
+  - { kind: lifespan, person: enoch_1192,      years: 365, citations: ["Gen 5:23"] }
+  - { kind: lifespan, person: methuselah_2042, years: 969, citations: ["Gen 5:27"] }
+  - { kind: lifespan, person: lamech_1809,     years: 777, citations: ["Gen 5:31"] }
+  - { kind: lifespan, person: noah_2210,       years: 950, citations: ["Gen 9:29"] }
+  # Genesis 11 — age at fatherhood
+  - { kind: age_at_fatherhood, parent: shem_2613,     child: arphaxad_312, age: 100, citations: ["Gen 11:10"] }
+  - { kind: age_at_fatherhood, parent: arphaxad_312,  child: salah_2455,   age: 35,  citations: ["Gen 11:12"] }
+  - { kind: age_at_fatherhood, parent: salah_2455,    child: eber_1030,    age: 30,  citations: ["Gen 11:14"] }
+  - { kind: age_at_fatherhood, parent: eber_1030,     child: peleg_2308,   age: 34,  citations: ["Gen 11:16"] }
+  - { kind: age_at_fatherhood, parent: peleg_2308,    child: reu_2428,     age: 30,  citations: ["Gen 11:18"] }
+  - { kind: age_at_fatherhood, parent: reu_2428,      child: serug_2503,   age: 32,  citations: ["Gen 11:20"] }
+  - { kind: age_at_fatherhood, parent: serug_2503,    child: nahor_2142,   age: 30,  citations: ["Gen 11:22"] }
+  - { kind: age_at_fatherhood, parent: nahor_2142,    child: terah_2841,   age: 29,  citations: ["Gen 11:24"] }
+  - { kind: age_at_fatherhood, parent: terah_2841,    child: abraham_58,   age: 70,  citations: ["Gen 11:26"] }
+  # Monarchy
+  - { kind: regnal_length, person: david_994,    years: 40, realm: united, citations: ["2Sam 5:4"] }
+  - { kind: regnal_length, person: solomon_2762, years: 40, realm: united, citations: ["1Kgs 11:42"] }
+  - kind: synchronism
+    person: solomon_2762
+    event: "temple construction begun, 480 years after the exodus"
+    inYearOfReignOf: solomon_2762
+    year: 4
+    citations: ["1Kgs 6:1"]

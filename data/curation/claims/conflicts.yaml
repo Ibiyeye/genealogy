@@ -1,0 +1,53 @@
+# Competing genealogical claims. Each entry defines one conflict group; the
+# pipeline stamps every claim in the entry with the group id. `retract`
+# removes imported Theographic claims that pre-resolved the conflict.
+#
+# NOTE on the Theographic baseline: the import wires Joseph's father as Jacob
+# (Matthean) and separately makes Heli the father of MARY — one traditional
+# harmonization of Luke 3:23. We keep the Heli→Mary link as a "traditional"
+# claim (see patches.yaml) and present Joseph's father as a genuine conflict.
+
+- group: cg_joseph-father
+  about: "Father of Joseph, husband of Mary (Matt 1:16 vs Luke 3:23)"
+  retract: [thg_parent_jacob_683_joseph_1715]
+  claims:
+    - id: clm_joseph-father-jacob
+      type: parent_of
+      from: jacob_683
+      to: joseph_1715
+      citations: ["Matt 1:16"]
+      source: { tradition: NT, document: "Matthean genealogy" }
+      confidence: explicit
+    - id: clm_joseph-father-heli
+      type: parent_of
+      from: heli_1484
+      to: joseph_1715
+      citations: ["Luke 3:23"]
+      source: { tradition: NT, document: "Lukan genealogy" }
+      confidence: explicit
+      note: >-
+        Luke's "son of Heli" is read by some as Mary's line or a levirate
+        lineage; presented here as an attested alternative, unresolved by
+        design.
+
+- group: cg_salah-father
+  about: "Father of Salah/Shelah: Arphaxad (MT Gen 11:12) vs Cainan (LXX; Luke 3:35-36)"
+  retract: [thg_parent_cainan_535_salah_2455]
+  claims:
+    - id: clm_salah-father-arphaxad
+      type: parent_of
+      from: arphaxad_312
+      to: salah_2455
+      citations: ["Gen 11:12"]
+      source: { tradition: MT, document: "Genesis 11 (Masoretic Text)" }
+      confidence: explicit
+    - id: clm_salah-father-cainan
+      type: parent_of
+      from: cainan_535
+      to: salah_2455
+      citations: ["Luke 3:35-36"]
+      source: { tradition: LXX, document: "Lukan genealogy, following the Septuagint of Gen 11:12" }
+      confidence: explicit
+      note: >-
+        The second Cainan appears in the Septuagint and Luke's genealogy but
+        is absent from the Masoretic Text of Gen 11:12.

@@ -1,0 +1,37 @@
+# Concubinage (concubine → partner).
+- id: clm_conc_hagar-abraham
+  type: concubine_of
+  from: hagar_1348
+  to: abraham_58
+  citations: ["Gen 16:3", "Gen 25:6"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_conc_keturah-abraham
+  type: concubine_of
+  from: keturah_1782
+  to: abraham_58
+  citations: ["1Chr 1:32"]
+  source: { tradition: MT }
+  confidence: explicit
+  note: "Called wife in Gen 25:1 but concubine in 1Chr 1:32."
+- id: clm_conc_bilhah-jacob
+  type: concubine_of
+  from: bilhah_502
+  to: israel_682
+  citations: ["Gen 35:22"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_conc_zilpah-jacob
+  type: concubine_of
+  from: zilpah_3081
+  to: israel_682
+  citations: ["Gen 30:9", "Gen 35:26"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_conc_rizpah-saul
+  type: concubine_of
+  from: rizpah_2444
+  to: saul_2478
+  citations: ["2Sam 3:7"]
+  source: { tradition: MT }
+  confidence: explicit

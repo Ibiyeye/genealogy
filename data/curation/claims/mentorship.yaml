@@ -1,0 +1,29 @@
+# Mentorship (mentee → mentor).
+- id: clm_ment_joshua-moses
+  type: mentored_by
+  from: joshua_1727
+  to: moses_2108
+  citations: ["Exod 24:13", "Deut 34:9"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_ment_elisha-elijah
+  type: mentored_by
+  from: elisha_1153
+  to: elijah_1131
+  citations: ["1Kgs 19:19-21", "2Kgs 2:9"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_ment_samuel-eli
+  type: mentored_by
+  from: samuel_2469
+  to: eli_1072
+  citations: ["1Sam 3:1"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_ment_timothy-paul
+  type: mentored_by
+  from: timotheus_2863
+  to: paul_2479
+  citations: ["Acts 16:1-3", "1Tim 1:2"]
+  source: { tradition: NT }
+  confidence: explicit

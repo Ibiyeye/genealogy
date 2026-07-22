@@ -1,0 +1,16 @@
+# Contemporaries (symmetric) — used sparingly for figures whose overlap the
+# text itself establishes and who are otherwise unconnected in the graph.
+- id: clm_cont_daniel-nebuchadnezzar
+  type: contemporary_of
+  from: daniel_975
+  to: nebuchadnezzar_2167
+  citations: ["Dan 1:1-6", "Dan 2:1"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_cont_haggai-zechariah
+  type: contemporary_of
+  from: haggai_1349
+  to: zechariah_3016
+  citations: ["Ezra 5:1"]
+  source: { tradition: MT }
+  confidence: explicit

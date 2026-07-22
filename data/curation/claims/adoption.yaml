@@ -1,0 +1,31 @@
+# Adoption (adoptee → adopter).
+- id: clm_adopt_esther-mordecai
+  type: adopted_by
+  from: esther_1343
+  to: mordecai_2107
+  citations: ["Esth 2:7"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_adopt_moses-pharaohs-daughter
+  type: adopted_by
+  from: moses_2108
+  to: daughter_of_pharaoh_988
+  citations: ["Exod 2:10"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_adopt_ephraim-jacob
+  type: adopted_by
+  from: ephraim_1206
+  to: israel_682
+  citations: ["Gen 48:5"]
+  source: { tradition: MT }
+  confidence: explicit
+  note: "Jacob claims Joseph's sons as his own for inheritance."
+- id: clm_adopt_manasseh-jacob
+  type: adopted_by
+  from: manasseh_1928
+  to: israel_682
+  citations: ["Gen 48:5"]
+  source: { tradition: MT }
+  confidence: explicit
+  note: "Jacob claims Joseph's sons as his own for inheritance."

@@ -1,5 +1,8 @@
 # Force-overrides for the notability filter, by PersonId (personLookup slug
 # for imported people). Curated additions from people/*.yaml are always
 # included and don't need listing here.
-include: []
+include:
+  - daughter_of_pharaoh_988 # Moses' adoptive mother (Exod 2:10)
+  - rizpah_2444 # concubine of Saul (2Sam 3:7)
+  - zechariah_3016 # the prophet; overlaps Haggai (Ezra 5:1)
 exclude: []

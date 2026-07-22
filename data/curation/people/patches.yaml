@@ -1,0 +1,62 @@
+# Person patches: refined name variants and display fixes.
+# Sorted by id; each entry patches the imported person of that id.
+
+- id: abraham_58
+  variants:
+    - { name: Abram, kind: birth, citations: ["Gen 17:5"] }
+
+- id: daniel_975
+  variants:
+    - { name: Belteshazzar, kind: renamed, citations: ["Dan 1:7"] }
+
+- id: esther_1343
+  variants:
+    - { name: Hadassah, kind: hebrew, citations: ["Esth 2:7"] }
+
+- id: gideon_1314
+  variants:
+    - { name: Jerubbaal, kind: renamed, citations: ["Judg 6:32"] }
+
+- id: israel_682
+  variants:
+    - { name: Israel, kind: renamed, citations: ["Gen 32:28", "Gen 35:10"] }
+
+- id: jehoahaz_2516
+  disambiguator: "son of Josiah, king of Judah"
+  variants:
+    - { name: Shallum, kind: birth, citations: ["1Chr 3:15", "Jer 22:11"] }
+
+- id: joshua_1727
+  variants:
+    - { name: Hoshea, kind: birth, citations: ["Num 13:16"] }
+
+- id: melchisedec_1991
+  primaryName: Melchizedek
+  variants:
+    - { name: Melchisedec, kind: alt-spelling, citations: ["Heb 7:1"] }
+  citations: ["Gen 14:18", "Ps 110:4", "Heb 7:1"]
+
+- id: paul_2479
+  variants:
+    - { name: Saul, kind: hebrew, citations: ["Acts 13:9"] }
+
+- id: peter_2745
+  primaryName: Peter
+  disambiguator: "the apostle"
+  variants:
+    - { name: Simon, kind: birth, citations: ["Matt 4:18"] }
+    - { name: Cephas, kind: hebrew, citations: ["John 1:42"] }
+
+- id: sarah_2473
+  variants:
+    - { name: Sarai, kind: birth, citations: ["Gen 17:15"] }
+
+- id: timotheus_2863
+  primaryName: Timothy
+  variants:
+    - { name: Timotheus, kind: alt-spelling, citations: ["Acts 16:1"] }
+
+- id: uzziah_375
+  variants:
+    - { name: Azariah, kind: alt-spelling, citations: ["2Kgs 15:1"] }
+  disambiguator: "king of Judah"

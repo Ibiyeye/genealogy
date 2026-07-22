@@ -1,0 +1,107 @@
+# Royal succession (predecessor → successor). United monarchy, then the
+# kings of Judah where the Theographic slugs are unambiguous.
+- id: clm_succ_saul-david
+  type: succeeded_by
+  from: saul_2478
+  to: david_994
+  citations: ["2Sam 5:3"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_succ_david-solomon
+  type: succeeded_by
+  from: david_994
+  to: solomon_2762
+  citations: ["1Kgs 1:39"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_succ_solomon-rehoboam
+  type: succeeded_by
+  from: solomon_2762
+  to: rehoboam_2412
+  citations: ["1Kgs 11:43"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_succ_asa-jehoshaphat
+  type: succeeded_by
+  from: asa_318
+  to: jehoshaphat_808
+  citations: ["1Kgs 15:24"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_succ_jehoshaphat-jehoram
+  type: succeeded_by
+  from: jehoshaphat_808
+  to: jehoram_803
+  citations: ["1Kgs 22:50"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_succ_uzziah-jotham
+  type: succeeded_by
+  from: uzziah_375
+  to: jotham_1735
+  citations: ["2Kgs 15:7"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_succ_jotham-ahaz
+  type: succeeded_by
+  from: jotham_1735
+  to: ahaz_118
+  citations: ["2Kgs 15:38"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_succ_ahaz-hezekiah
+  type: succeeded_by
+  from: ahaz_118
+  to: hezekiah_1512
+  citations: ["2Kgs 16:20"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_succ_hezekiah-manasseh
+  type: succeeded_by
+  from: hezekiah_1512
+  to: manasseh_1930
+  citations: ["2Kgs 20:21"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_succ_manasseh-amon
+  type: succeeded_by
+  from: manasseh_1930
+  to: amon_236
+  citations: ["2Kgs 21:18"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_succ_amon-josiah
+  type: succeeded_by
+  from: amon_236
+  to: josiah_1730
+  citations: ["2Kgs 21:26"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_succ_josiah-jehoahaz
+  type: succeeded_by
+  from: josiah_1730
+  to: jehoahaz_2516
+  citations: ["2Kgs 23:30"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_succ_jehoahaz-jehoiakim
+  type: succeeded_by
+  from: jehoahaz_2516
+  to: jehoiakim_1085
+  citations: ["2Kgs 23:34"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_succ_jehoiakim-jehoiachin
+  type: succeeded_by
+  from: jehoiakim_1085
+  to: jehoiachin_791
+  citations: ["2Kgs 24:6"]
+  source: { tradition: MT }
+  confidence: explicit
+- id: clm_succ_jehoiachin-zedekiah
+  type: succeeded_by
+  from: jehoiachin_791
+  to: zedekiah_1950
+  citations: ["2Kgs 24:17"]
+  source: { tradition: MT }
+  confidence: explicit

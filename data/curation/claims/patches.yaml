@@ -1,0 +1,32 @@
+# Adjustments to imported Theographic claims (citations, confidence, notes).
+
+# Theographic's Heli→Mary link is a harmonization hypothesis, not a stated
+# fact: Luke 3:23 says "Joseph, son of Heli". Keep it, downgraded.
+- id: thg_parent_heli_1484_mary_1938
+  set:
+    confidence: traditional
+    source: { tradition: curated, document: "Harmonization reading of Luke 3:23 (Heli as Mary's father)" }
+    note: >-
+      Not stated in the text. One traditional resolution of the Matt 1 / Luke 3
+      divergence takes Luke's genealogy as Mary's, making Heli her father.
+
+# Arphaxad→Cainan exists only in the LXX/Lukan line; flag its tradition.
+- id: thg_parent_arphaxad_312_cainan_535
+  set:
+    citations: ["Luke 3:36"]
+    confidence: explicit
+    source: { tradition: LXX, document: "Lukan genealogy, following the Septuagint" }
+
+# Key patriarch links: attach the explicit citations the import lacked.
+- id: thg_parent_israel_682_joseph_1710
+  set:
+    citations: ["Gen 30:24-25", "Gen 37:3"]
+- id: thg_parent_abraham_58_isaac_616
+  set:
+    citations: ["Gen 21:2-3"]
+- id: thg_parent_isaac_616_israel_682
+  set:
+    citations: ["Gen 25:26"]
+- id: thg_parent_jesse_903_david_994
+  set:
+    citations: ["Ruth 4:22", "1Sam 16:11-13"]

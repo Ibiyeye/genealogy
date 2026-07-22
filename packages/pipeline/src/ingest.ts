@@ -99,6 +99,7 @@ export function ingest(theoPersons: TheoPerson[]): IngestResult {
         .map((name) => ({ name, kind: "alt-spelling" as const, citations: [] })),
       citations: [], // filled by verse resolution
       verseCount: typeof f.verseCount === "number" ? f.verseCount : 0,
+      groups: [], // filled from peopleGroups at emit time
       sourceIds: { theographic: rec.id },
     };
     if (gender) person.gender = gender;
