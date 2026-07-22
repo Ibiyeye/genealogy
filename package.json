@@ -1,0 +1,21 @@
+{
+  "name": "genealogy",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "vendor": "pnpm --filter @genealogy/pipeline vendor",
+    "build:data": "pnpm --filter @genealogy/pipeline build:data",
+    "validate": "pnpm --filter @genealogy/pipeline validate",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "dev": "pnpm --filter @genealogy/app dev",
+    "build": "pnpm build:data && pnpm --filter @genealogy/app build"
+  },
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@types/node": "^22"
+  }
+}

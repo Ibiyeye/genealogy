@@ -1,0 +1,6 @@
+node_modules/
+dist/
+packages/pipeline/vendor/theographic/*.json
+packages/pipeline/reports/
+*.log
+.DS_Store
