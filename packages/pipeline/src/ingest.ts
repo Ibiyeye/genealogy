@@ -34,14 +34,16 @@ function normalizeGender(g: string | undefined): "male" | "female" | undefined {
 }
 
 function splitAlsoCalled(raw: unknown): string[] {
-  if (Array.isArray(raw)) return raw.map(String).map((s) => s.trim()).filter(Boolean);
-  if (typeof raw === "string") {
-    return raw
-      .split(/[,;/]/)
-      .map((s) => s.trim())
-      .filter(Boolean);
-  }
-  return [];
+  const parts = Array.isArray(raw)
+    ? raw.map(String)
+    : typeof raw === "string"
+      ? raw.split(/[,;/]/)
+      : [];
+  return parts
+    .map((s) => s.trim())
+    // Common-noun reference words ("mother", "daughter", "concubine") appear
+    // in alsoCalled for unnamed figures; real name variants are capitalized.
+    .filter((s) => s.length > 0 && s[0] === s[0]?.toUpperCase());
 }
 
 export function ingest(theoPersons: TheoPerson[]): IngestResult {

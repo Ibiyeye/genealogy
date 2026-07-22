@@ -71,6 +71,15 @@ describe("ingest", () => {
     ).toHaveLength(0);
   });
 
+  it("drops lowercase common-noun alsoCalled values, keeps real variants", () => {
+    const r = ingest([
+      tp("rec1", "mary_1", "Mary", { alsoCalled: "mother" }),
+      tp("rec2", "josiah_1", "Josiah", { alsoCalled: "hen,Hen" }),
+    ]);
+    expect(r.persons.get("mary_1")!.variants).toHaveLength(0);
+    expect(r.persons.get("josiah_1")!.variants.map((v) => v.name)).toEqual(["Hen"]);
+  });
+
   it("derives names and disambiguators from displayTitle patterns", () => {
     const r = ingest([
       tp("rec1", "mary_1", "Mary", { displayTitle: "Mary (mother of Jesus)" }),
