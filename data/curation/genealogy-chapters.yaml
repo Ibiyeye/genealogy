@@ -1,0 +1,9 @@
+# Chapters containing genealogical lists. Anyone with a verse mention in one
+# of these chapters passes the notability filter regardless of verseCount.
+# Values are chapter numbers or "lo-hi" ranges; book keys are compact codes.
+Gen: [5, 10, 11, 36, 46]
+Num: [26]
+Ruth: [4]
+1Chr: ["1-9"]
+Matt: [1]
+Luke: [3]

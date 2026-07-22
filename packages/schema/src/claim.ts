@@ -68,10 +68,14 @@ export const ClaimSchema = z
     note: z.string().optional(),
   })
   .superRefine((claim, ctx) => {
-    if (claim.citations.length === 0 && claim.confidence !== "traditional" && claim.confidence !== "inferred") {
+    const citationExempt =
+      claim.confidence === "traditional" ||
+      claim.confidence === "inferred" ||
+      claim.source.tradition === "theographic";
+    if (claim.citations.length === 0 && !citationExempt) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: `claim ${claim.id}: citations required unless confidence is "traditional" or "inferred"`,
+        message: `claim ${claim.id}: citations required unless confidence is "traditional"/"inferred" or source is the theographic import`,
       });
     }
     if (claim.from === claim.to) {

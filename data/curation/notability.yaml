@@ -1,0 +1,5 @@
+# Force-overrides for the notability filter, by PersonId (personLookup slug
+# for imported people). Curated additions from people/*.yaml are always
+# included and don't need listing here.
+include: []
+exclude: []
