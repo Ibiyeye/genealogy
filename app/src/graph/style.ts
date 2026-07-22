@@ -75,12 +75,13 @@ export const CY_STYLE: StylesheetJson = [
   {
     selector: "edge",
     style: {
-      width: 1.5,
+      width: 2,
       "curve-style": "bezier",
+      "control-point-step-size": 32,
       "line-color": "#555b6e",
       "target-arrow-shape": "none",
       "source-arrow-shape": "none",
-      "arrow-scale": 0.9,
+      "arrow-scale": 1.15,
       "font-size": 9,
       color: "#9a96a0",
       "text-background-color": "#14161c",
@@ -88,34 +89,49 @@ export const CY_STYLE: StylesheetJson = [
       "text-background-padding": "2px",
     },
   },
+  // Lineage edges route orthogonally (organogram style): straight down,
+  // one clean turn, rounded corner.
   {
     selector: 'edge[type = "parent_of"]',
     style: {
-      "line-color": "#7a8296",
+      "curve-style": "taxi",
+      "taxi-direction": "downward",
+      "taxi-turn": "40%",
+      "taxi-turn-min-distance": 12,
+      "corner-radius": 10 as never,
+      width: 2.5,
+      "line-color": "#8a93a8",
       "target-arrow-shape": "triangle",
-      "target-arrow-color": "#7a8296",
+      "target-arrow-color": "#8a93a8",
       "target-arrow-fill": "filled",
     },
   },
   {
     selector: 'edge[type = "ancestor_of"]',
     style: {
-      "line-style": "dotted",
-      "line-color": "#7a8296",
+      "curve-style": "taxi",
+      "taxi-direction": "downward",
+      "taxi-turn": "40%",
+      "taxi-turn-min-distance": 12,
+      "corner-radius": 10 as never,
+      "line-style": "dashed",
+      "line-dash-pattern": [2, 5] as never,
+      width: 2.5,
+      "line-color": "#8a93a8",
       "target-arrow-shape": "triangle",
-      "target-arrow-color": "#7a8296",
+      "target-arrow-color": "#8a93a8",
       "target-arrow-fill": "hollow",
-      label: "⋯",
-      "font-size": 13,
     },
   },
+  // Lateral (non-hierarchy) ties render slightly transparent so the
+  // generational structure stays dominant; hover restores full strength.
   {
     selector: 'edge[type = "spouse_of"]',
-    style: { "line-color": "#a06e88", width: 2 },
+    style: { "line-color": "#a06e88", width: 2.5, opacity: 0.65 },
   },
   {
     selector: 'edge[type = "concubine_of"]',
-    style: { "line-color": "#a06e88", "line-style": "dashed", width: 1.5 },
+    style: { "line-color": "#a06e88", "line-style": "dashed", width: 2, opacity: 0.65 },
   },
   {
     selector: 'edge[type = "adopted_by"]',
@@ -130,9 +146,10 @@ export const CY_STYLE: StylesheetJson = [
     selector: 'edge[type = "succeeded_by"]',
     style: {
       "line-color": "#7fb4d9",
+      width: 2.5,
       "target-arrow-shape": "chevron",
       "target-arrow-color": "#7fb4d9",
-      "arrow-scale": 1.1,
+      "arrow-scale": 1.25,
     },
   },
   {
@@ -147,11 +164,11 @@ export const CY_STYLE: StylesheetJson = [
   },
   {
     selector: 'edge[type = "contemporary_of"]',
-    style: { "line-color": "#556070", "line-style": "dotted", width: 1 },
+    style: { "line-color": "#556070", "line-style": "dotted", width: 1.5, opacity: 0.6 },
   },
   {
     selector: 'edge[type = "sibling_of"]',
-    style: { "line-color": "#495064", width: 1 },
+    style: { "line-color": "#495064", width: 1.5, opacity: 0.6 },
   },
   { selector: "edge[?telescoped]", style: { "line-style": "dotted" } },
   {
@@ -162,13 +179,13 @@ export const CY_STYLE: StylesheetJson = [
       label: "⚠",
       "font-size": 10,
       color: "#d98e4a",
-      width: 2,
+      width: 2.5,
     },
   },
   { selector: "edge.conflict.alt", style: { "line-style": "dashed" } },
   {
     selector: "edge.hover",
-    style: { width: 3 },
+    style: { width: 3.5, opacity: 1 },
   },
   {
     selector: "node.badge",

@@ -52,3 +52,30 @@ several thresholds each run so the 500–1,500 target is easy to retune.
 Derived from [Theographic Bible Metadata](https://github.com/robertrouse/theographic-bible-metadata)
 by Robert Rouse (Viz.Bible) under CC BY-SA 4.0 — see [LICENSE-DATA.md](LICENSE-DATA.md).
 App code is MIT.
+
+## Deploying to Cloudflare Pages
+
+The site is fully static — the emitted dataset in `app/public/data/` is
+committed, so Cloudflare only needs to build the app itself.
+
+1. Push this repository to GitHub (see below if you're new to this).
+2. In the Cloudflare dashboard: **Workers & Pages → Create → Pages →
+   Connect to Git**, select the repository.
+3. Build settings:
+   - Build command: `corepack enable && pnpm install && pnpm build:site`
+   - Build output directory: `app/dist`
+   (Node version is picked up from `.node-version`.)
+4. After the first deploy, open the project's **Custom domains** tab and add
+   your domain — since the domain is already on Cloudflare, DNS and HTTPS
+   are configured automatically.
+
+### First time with GitHub?
+
+1. Create a free account at [github.com](https://github.com).
+2. Install the GitHub CLI: `brew install gh`
+3. Sign in: `gh auth login` — choose *GitHub.com → HTTPS → Login with a web
+   browser* and follow the prompts.
+4. From this folder, publish the repo:
+   `gh repo create genealogy --public --source=. --push`
+
+Every future `git push` triggers an automatic redeploy.

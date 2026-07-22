@@ -1,30 +1,47 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import cytoscape, { type Core, type ElementDefinition } from "cytoscape";
-import dagre from "cytoscape-dagre";
+import elk from "cytoscape-elk";
 import type { Claim } from "@genealogy/schema";
 import { useStore } from "../store.js";
 import { computeSubgraph } from "./subgraph.js";
 import { CY_STYLE } from "./style.js";
 import { GraphLegend } from "./GraphLegend.js";
 
-cytoscape.use(dagre);
+cytoscape.use(elk);
 
 const REDUCED_MOTION =
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/** Layout isolated here so swapping dagre → elk is a one-place change. */
+/** Edge types that define the vertical hierarchy. Everything else (marriage,
+ *  succession, mentorship…) is drawn but deliberately EXCLUDED from the
+ *  layout graph, so lateral ties can't bend the generational layers — the
+ *  key to an organogram-clean result. */
+const HIERARCHY_TYPES = new Set(["parent_of", "ancestor_of"]);
+
+/** Layout isolated here so swapping engines is a one-place change. */
 function runLayout(cy: Core, animate: boolean): void {
-  cy.layout({
-    name: "dagre",
-    // @ts-expect-error dagre options aren't in the base LayoutOptions type
-    rankDir: "TB",
-    ranker: "tight-tree",
-    nodeSep: 20,
-    rankSep: 50,
-    edgeSep: 8,
+  const lateral = cy.edges().filter((e) => {
+    const t = e.data("type") as string | undefined;
+    return t !== undefined && !HIERARCHY_TYPES.has(t);
+  });
+  // ELK layered (Sugiyama) with crossing minimization, on the tree edges
+  // plus badge links only.
+  cy.elements().not(lateral).layout({
+    name: "elk",
+    // @ts-expect-error elk options aren't in the base LayoutOptions type
+    elk: {
+      algorithm: "layered",
+      "elk.direction": "DOWN",
+      "elk.layered.spacing.nodeNodeBetweenLayers": 64,
+      "elk.spacing.nodeNode": 26,
+      "elk.layered.nodePlacement.strategy": "NETWORK_SIMPLEX",
+      "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
+      "elk.layered.thoroughness": 10,
+      "elk.layered.considerModelOrder.strategy": "PREFER_NODES",
+    },
     animate: animate && !REDUCED_MOTION,
-    animationDuration: 350,
+    animationDuration: 380,
     animationEasing: "ease-out",
     fit: true,
     padding: 44,
