@@ -6,6 +6,7 @@ import { SearchBar } from "./search/SearchBar.js";
 import { DetailPanel } from "./panels/DetailPanel.js";
 import { GraphView } from "./graph/GraphView.js";
 import { TimelineView } from "./timeline/TimelineView.js";
+import { AboutButton, ChronologyToggle, ClaimTypeChips } from "./panels/Controls.js";
 
 export function App(): React.ReactElement {
   const dataset = useStore((s) => s.dataset);
@@ -64,11 +65,16 @@ export function App(): React.ReactElement {
       <header className="app-header">
         <h1 className="app-title">Biblical Genealogy Explorer</h1>
         <SearchBar />
+        <ChronologyToggle />
         <div className="header-meta">
           {dataset.manifest.counts.persons.toLocaleString()} people ·{" "}
           {dataset.manifest.counts.claims.toLocaleString()} relationships
+          <AboutButton />
         </div>
       </header>
+      <div className="subheader">
+        <ClaimTypeChips />
+      </div>
       <main className="app-main">
         <section className="views">
           <GraphView />
