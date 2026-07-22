@@ -194,6 +194,50 @@ body {
   color: var(--text-dim);
 }
 
+/* ---------- graph ---------- */
+.cy-container { position: absolute; inset: 0; }
+.graph-empty-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--text-dim);
+  pointer-events: none;
+}
+.breadcrumbs {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.6rem;
+  z-index: 10;
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+}
+.crumb {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-dim);
+  font: inherit;
+  font-size: 0.78rem;
+  padding: 0.1rem 0.6rem;
+  cursor: pointer;
+}
+.crumb:hover { color: var(--text); border-color: var(--accent-dim); }
+.crumb::after { content: " ›"; color: var(--border); }
+.crumb-current { color: var(--accent); padding: 0.1rem 0.4rem; }
+.graph-hint {
+  position: absolute;
+  bottom: 0.4rem;
+  right: 0.7rem;
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
 .app-loading, .app-error { display: grid; place-items: center; height: 100%; color: var(--text-dim); }
 .app-error { text-align: center; }
 .app-error code { background: var(--bg-raised); padding: 0.1rem 0.4rem; border-radius: 4px; }

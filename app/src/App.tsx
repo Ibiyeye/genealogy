@@ -4,6 +4,7 @@ import { loadDataset, loadChronologyLayer } from "./data/loadDataset.js";
 import { useStore } from "./store.js";
 import { SearchBar } from "./search/SearchBar.js";
 import { DetailPanel } from "./panels/DetailPanel.js";
+import { GraphView } from "./graph/GraphView.js";
 
 export function App(): React.ReactElement {
   const dataset = useStore((s) => s.dataset);
@@ -69,9 +70,7 @@ export function App(): React.ReactElement {
       </header>
       <main className="app-main">
         <section className="views">
-          <div className="graph-area placeholder">
-            <p>Graph view (M5)</p>
-          </div>
+          <GraphView />
           <div className="timeline-area placeholder">
             <p>Timeline view (M6)</p>
           </div>
