@@ -238,6 +238,54 @@ body {
   pointer-events: none;
 }
 
+/* ---------- timeline ---------- */
+.timeline-area { overflow-y: auto; overflow-x: hidden; background: var(--bg); }
+.timeline-svg { display: block; cursor: grab; }
+.timeline-svg:active { cursor: grabbing; }
+.era-label {
+  fill: var(--text-dim);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+.tick-line { stroke: rgba(255, 255, 255, 0.05); }
+.tick-label { fill: var(--text-dim); font-size: 10px; }
+.life-bar { cursor: pointer; }
+.life-bar.precise { fill: #7a8296; }
+.life-bar.floruit {
+  fill: rgba(122, 130, 150, 0.28);
+  stroke: #7a8296;
+  stroke-width: 1;
+  stroke-dasharray: none;
+}
+.life-bar.fallback { opacity: 0.35; }
+.life-bar:hover { fill: #9aa2b6; }
+.life-bar.selected {
+  fill: var(--accent);
+  stroke: var(--accent);
+  opacity: 1;
+}
+.bar-label {
+  fill: var(--text-dim);
+  font-size: 9px;
+  pointer-events: none;
+}
+.bar-label.selected { fill: var(--accent); font-size: 10px; }
+.timeline-tooltip {
+  position: absolute;
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.78rem;
+  pointer-events: none;
+  z-index: 30;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  max-width: 240px;
+}
+.tooltip-note { color: var(--conflict); font-size: 0.72rem; }
+
 .app-loading, .app-error { display: grid; place-items: center; height: 100%; color: var(--text-dim); }
 .app-error { text-align: center; }
 .app-error code { background: var(--bg-raised); padding: 0.1rem 0.4rem; border-radius: 4px; }
