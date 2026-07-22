@@ -73,6 +73,9 @@ export function App(): React.ReactElement {
         </div>
       </header>
       <div className="subheader">
+        <span className="subheader-label" title="Toggle which relationship types are drawn as lines in the graph">
+          Show relationships:
+        </span>
         <ClaimTypeChips />
       </div>
       <main className="app-main">

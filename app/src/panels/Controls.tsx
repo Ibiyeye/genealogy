@@ -2,16 +2,16 @@ import { useState } from "react";
 import type { ClaimType } from "@genealogy/schema";
 import { ALL_CLAIM_TYPES, useStore } from "../store.js";
 
-const TYPE_LABELS: Record<ClaimType, string> = {
-  parent_of: "lineage",
-  ancestor_of: "skipped gens",
-  spouse_of: "marriage",
-  concubine_of: "concubinage",
-  adopted_by: "adoption",
-  succeeded_by: "succession",
-  mentored_by: "mentorship",
-  contemporary_of: "contemporaries",
-  sibling_of: "siblings",
+const TYPE_LABELS: Record<ClaimType, { label: string; hint: string }> = {
+  parent_of: { label: "lineage", hint: "Parent → child descent" },
+  ancestor_of: { label: "skipped gens", hint: "Descent with generations skipped or omitted" },
+  spouse_of: { label: "marriage", hint: "Married couples" },
+  concubine_of: { label: "concubinage", hint: "Concubines (Hagar, Bilhah, Rizpah…)" },
+  adopted_by: { label: "adoption", hint: "Adoptive ties (Esther & Mordecai, Moses…)" },
+  succeeded_by: { label: "succession", hint: "Royal succession, king to king" },
+  mentored_by: { label: "mentorship", hint: "Teacher and student (Elijah & Elisha…)" },
+  contemporary_of: { label: "contemporaries", hint: "Lived at the same time" },
+  sibling_of: { label: "siblings", hint: "Brothers and sisters" },
 };
 
 export function ChronologyToggle(): React.ReactElement | null {
@@ -57,8 +57,9 @@ export function ClaimTypeChips(): React.ReactElement {
           className={visibleClaimTypes.has(type) ? "chip on" : "chip"}
           onClick={() => toggleClaimType(type)}
           aria-pressed={visibleClaimTypes.has(type)}
+          title={`${TYPE_LABELS[type].hint} — click to ${visibleClaimTypes.has(type) ? "hide" : "show"}`}
         >
-          {TYPE_LABELS[type]}
+          {TYPE_LABELS[type].label}
         </button>
       ))}
     </div>

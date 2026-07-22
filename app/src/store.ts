@@ -45,6 +45,7 @@ interface AppState {
   focus(id: PersonId): void;
   expand(id: PersonId): void;
   resetExpansion(): void;
+  setGenerationDepth(depth: number): void;
   setChronologyLayer(id: string): Promise<void>;
   toggleClaimType(type: ClaimType): void;
   registerLayer(layer: ChronologyLayer): void;
@@ -88,6 +89,9 @@ export const useStore = create<AppState>((set, get) => ({
   },
 
   resetExpansion: () => set({ expandedIds: new Set<PersonId>() }),
+
+  setGenerationDepth: (depth) =>
+    set({ generationDepth: Math.min(3, Math.max(1, depth)) }),
 
   setChronologyLayer: async (id) => {
     const { layers, dataset } = get();

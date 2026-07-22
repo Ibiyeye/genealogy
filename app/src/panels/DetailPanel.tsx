@@ -167,7 +167,14 @@ export function DetailPanel({ anchors }: { anchors: Anchor[] }): React.ReactElem
   if (!person || !dataset) {
     return (
       <aside className="detail-panel empty">
-        <p>Search for a person or click a node to see their details, relationships, and sources.</p>
+        <span className="section-label">Person details</span>
+        <p>Nothing selected yet.</p>
+        <p>
+          Click a <strong>node in the graph</strong> or a <strong>bar in the
+          timeline</strong> and this panel will show who they are: name
+          variants, family claims with verse citations, disputed genealogies
+          side by side, and what the text says about their dates.
+        </p>
       </aside>
     );
   }

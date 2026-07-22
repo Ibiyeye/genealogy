@@ -1,42 +1,59 @@
 /**
- * Cytoscape stylesheet: typed-edge styling is the whole point.
- * Lineage solid, spousal dashed-soft, concubinage dashed, telescoped dotted
- * with ellipsis, conflict edges orange with a ⚠ label on hover.
+ * Cytoscape stylesheet. The arrow system encodes relationship semantics:
+ *   parent_of      solid line, filled triangle → child
+ *   ancestor_of    dotted line, hollow triangle → descendant ("⋯" = skipped)
+ *   spouse_of      rose line, no arrows (symmetric)
+ *   concubine_of   rose dashed, no arrows
+ *   adopted_by     green dashed, diamond → adopter
+ *   succeeded_by   blue line, chevron → successor
+ *   mentored_by    violet dashed, circle at mentee side
+ *   contemporary_of gray dotted, no arrows
+ *   conflict pair  orange, one solid + one dashed, ⚠ label
+ * All elements share opacity transitions so hover-dimming animates smoothly.
  */
 import type { StylesheetJson } from "cytoscape";
 
 export const CY_STYLE: StylesheetJson = [
   {
+    selector: "node, edge",
+    style: {
+      "transition-property": "opacity",
+      "transition-duration": 180 as never,
+      "transition-timing-function": "ease-out",
+    },
+  },
+  {
     selector: "node",
     style: {
       label: "data(label)",
       width: "label",
-      height: 28,
-      padding: "8px",
+      height: 30,
+      padding: "9px",
       shape: "round-rectangle",
       "background-color": "#252935",
-      "border-width": 1,
+      "border-width": 1.5,
       "border-color": "#4a4f5e",
       color: "#e6e2d8",
       "font-size": 12,
-      "font-family": '"Iowan Old Style", Palatino, Georgia, serif',
+      "font-family": '"Crimson Pro", "Iowan Old Style", Palatino, Georgia, serif',
       "text-valign": "center",
       "text-halign": "center",
-      "text-max-width": "140px",
+      "text-max-width": "150px",
       "text-wrap": "ellipsis",
+      "overlay-padding": 6,
+      "overlay-color": "#c9a86a",
+      "overlay-opacity": 0,
     },
   },
-  {
-    selector: "node[gender = 'female']",
-    style: { "border-color": "#8a5f74" },
-  },
-  {
-    selector: "node[gender = 'male']",
-    style: { "border-color": "#4d6a85" },
-  },
+  { selector: "node[gender = 'female']", style: { "border-color": "#8a5f74" } },
+  { selector: "node[gender = 'male']", style: { "border-color": "#4d6a85" } },
   {
     selector: "node[?unnamed]",
     style: { "border-style": "dashed", "font-style": "italic" as never },
+  },
+  {
+    selector: "node:active",
+    style: { "overlay-opacity": 0.12 },
   },
   {
     selector: "node.focus",
@@ -52,8 +69,8 @@ export const CY_STYLE: StylesheetJson = [
     style: { "border-color": "#c9a86a", "border-width": 2.5 },
   },
   {
-    selector: "node.frontier-badge",
-    style: {},
+    selector: ".dim",
+    style: { opacity: 0.18 },
   },
   {
     selector: "edge",
@@ -62,6 +79,8 @@ export const CY_STYLE: StylesheetJson = [
       "curve-style": "bezier",
       "line-color": "#555b6e",
       "target-arrow-shape": "none",
+      "source-arrow-shape": "none",
+      "arrow-scale": 0.9,
       "font-size": 9,
       color: "#9a96a0",
       "text-background-color": "#14161c",
@@ -75,7 +94,7 @@ export const CY_STYLE: StylesheetJson = [
       "line-color": "#7a8296",
       "target-arrow-shape": "triangle",
       "target-arrow-color": "#7a8296",
-      "arrow-scale": 0.8,
+      "target-arrow-fill": "filled",
     },
   },
   {
@@ -83,20 +102,20 @@ export const CY_STYLE: StylesheetJson = [
     style: {
       "line-style": "dotted",
       "line-color": "#7a8296",
-      "target-arrow-shape": "triangle-tee",
+      "target-arrow-shape": "triangle",
       "target-arrow-color": "#7a8296",
-      "arrow-scale": 0.8,
+      "target-arrow-fill": "hollow",
       label: "⋯",
-      "font-size": 14,
+      "font-size": 13,
     },
   },
   {
     selector: 'edge[type = "spouse_of"]',
-    style: { "line-color": "#8a5f74", "line-style": "solid", width: 2 },
+    style: { "line-color": "#a06e88", width: 2 },
   },
   {
     selector: 'edge[type = "concubine_of"]',
-    style: { "line-color": "#8a5f74", "line-style": "dashed", width: 1.5 },
+    style: { "line-color": "#a06e88", "line-style": "dashed", width: 1.5 },
   },
   {
     selector: 'edge[type = "adopted_by"]',
@@ -111,10 +130,9 @@ export const CY_STYLE: StylesheetJson = [
     selector: 'edge[type = "succeeded_by"]',
     style: {
       "line-color": "#7fb4d9",
-      "line-style": "solid",
-      "target-arrow-shape": "vee",
+      "target-arrow-shape": "chevron",
       "target-arrow-color": "#7fb4d9",
-      "arrow-scale": 1,
+      "arrow-scale": 1.1,
     },
   },
   {
@@ -133,32 +151,31 @@ export const CY_STYLE: StylesheetJson = [
   },
   {
     selector: 'edge[type = "sibling_of"]',
-    style: { "line-color": "#495064", "line-style": "solid", width: 1 },
+    style: { "line-color": "#495064", width: 1 },
   },
-  {
-    selector: "edge[?telescoped]",
-    style: { "line-style": "dotted" },
-  },
+  { selector: "edge[?telescoped]", style: { "line-style": "dotted" } },
   {
     selector: "edge.conflict",
     style: {
       "line-color": "#d98e4a",
       "target-arrow-color": "#d98e4a",
-      label: "data(conflictLabel)",
+      label: "⚠",
       "font-size": 10,
       color: "#d98e4a",
+      width: 2,
     },
   },
+  { selector: "edge.conflict.alt", style: { "line-style": "dashed" } },
   {
-    selector: "edge.conflict.alt",
-    style: { "line-style": "dashed" },
+    selector: "edge.hover",
+    style: { width: 3 },
   },
   {
     selector: "node.badge",
     style: {
       shape: "ellipse",
-      width: 22,
-      height: 22,
+      width: 24,
+      height: 24,
       padding: "0px",
       "background-color": "#2c3242",
       "border-color": "#c9a86a",
@@ -166,6 +183,35 @@ export const CY_STYLE: StylesheetJson = [
       color: "#c9a86a",
       "font-size": 10,
       label: "data(label)",
+      "overlay-opacity": 0,
     },
   },
+  {
+    selector: "node.badge:active",
+    style: { "overlay-opacity": 0.15 },
+  },
+  {
+    selector: "edge.badge-link",
+    style: { "line-color": "#3a4050", "line-style": "dotted", width: 1 },
+  },
+];
+
+/** Legend entries, mirrored from the selectors above. */
+export const EDGE_LEGEND: Array<{
+  type: string;
+  label: string;
+  color: string;
+  dash?: "dashed" | "dotted";
+  arrow?: "triangle" | "hollow-triangle" | "diamond" | "chevron" | "circle";
+  hint: string;
+}> = [
+  { type: "parent_of", label: "parent → child", color: "#7a8296", arrow: "triangle", hint: "Arrow points from parent to child" },
+  { type: "ancestor_of", label: "ancestor ⋯ descendant", color: "#7a8296", dash: "dotted", arrow: "hollow-triangle", hint: "Generations skipped in the text or omitted here" },
+  { type: "spouse_of", label: "marriage", color: "#a06e88", hint: "No arrow — mutual" },
+  { type: "concubine_of", label: "concubinage", color: "#a06e88", dash: "dashed", hint: "No arrow — mutual" },
+  { type: "adopted_by", label: "adoption", color: "#8fbf9f", dash: "dashed", arrow: "diamond", hint: "Diamond points to the adopter" },
+  { type: "succeeded_by", label: "succession", color: "#7fb4d9", arrow: "chevron", hint: "Chevron points to the successor" },
+  { type: "mentored_by", label: "mentorship", color: "#b8a6d9", dash: "dashed", arrow: "circle", hint: "Circle marks the student" },
+  { type: "contemporary_of", label: "contemporaries", color: "#556070", dash: "dotted", hint: "Lived at the same time" },
+  { type: "sibling_of", label: "siblings", color: "#495064", hint: "No arrow — mutual" },
 ];
