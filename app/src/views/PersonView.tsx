@@ -1,5 +1,5 @@
-import { useMemo } from "react";
-import type { Claim, PersonId } from "@genealogy/schema";
+import { useMemo, useState } from "react";
+import type { Claim, NameVariant, PersonId } from "@genealogy/schema";
 import { useStore } from "../store.js";
 import { lifespanLabel } from "../data/loadDataset.js";
 import { VerseChips } from "./bits.js";
@@ -95,20 +95,7 @@ export function PersonView({ id }: { id: string }): React.ReactElement {
         <h1>{person.primaryName}</h1>
         {person.disambiguator && <p className="page-sub">{person.disambiguator}</p>}
         {years && <p className="person-years">{years}</p>}
-        {person.variants.length > 0 && (
-          <p className="variants-line">
-            {person.variants.map((v, i) => (
-              <span key={v.name}>
-                {i > 0 && " · "}
-                <em>{v.name}</em>{" "}
-                <span className="variant-kind">
-                  ({KIND_LABELS[v.kind] ?? v.kind}
-                  {v.citations.length > 0 ? `, ${v.citations.join(", ")}` : ""})
-                </span>
-              </span>
-            ))}
-          </p>
-        )}
+        {person.variants.length > 0 && <VariantLines variants={person.variants} />}
       </header>
 
       {parentConflicts.size > 0 &&
@@ -231,6 +218,57 @@ export function PersonView({ id }: { id: string }): React.ReactElement {
             ))}
           </div>
         </section>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Variants grouped by kind — one labelled line per kind rather than
+ * repeating "(also spelled)" after every name. Long lists (Jesus carries
+ * 26 messianic titles) collapse behind a toggle so the family stays
+ * above the fold.
+ */
+function VariantLines({ variants }: { variants: NameVariant[] }): React.ReactElement {
+  const [expanded, setExpanded] = useState(false);
+  const CAP = 6;
+
+  const byKind = new Map<string, NameVariant[]>();
+  for (const v of variants) {
+    let list = byKind.get(v.kind);
+    if (!list) byKind.set(v.kind, (list = []));
+    list.push(v);
+  }
+
+  return (
+    <div className="variants-block">
+      {[...byKind].map(([kind, list]) => {
+        const shown = expanded ? list : list.slice(0, CAP);
+        const hidden = list.length - shown.length;
+        return (
+          <p className="variants-line" key={kind}>
+            <span className="variant-kind">{KIND_LABELS[kind] ?? kind}: </span>
+            {shown.map((v, i) => (
+              <span key={v.name}>
+                {i > 0 && ", "}
+                <em>{v.name}</em>
+                {v.citations.length > 0 && (
+                  <span className="variant-cite"> ({v.citations.join(", ")})</span>
+                )}
+              </span>
+            ))}
+            {hidden > 0 && (
+              <button className="variants-more" onClick={() => setExpanded(true)}>
+                +{hidden} more
+              </button>
+            )}
+          </p>
+        );
+      })}
+      {expanded && (
+        <button className="variants-more" onClick={() => setExpanded(false)}>
+          show fewer
+        </button>
       )}
     </div>
   );

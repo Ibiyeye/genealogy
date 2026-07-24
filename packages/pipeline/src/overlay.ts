@@ -35,6 +35,9 @@ const PersonEntrySchema = z.object({
   groups: z.array(z.string()).optional(),
   /** Merged into existing variants by name; replaces kind/citations. */
   variants: z.array(NameVariantSchema).optional(),
+  /** When true, `variants` replaces the imported list instead of merging —
+   *  the only way to drop junk variants the import invented. */
+  replaceVariants: z.boolean().optional(),
 });
 const PeopleFileSchema = z.array(PersonEntrySchema);
 
@@ -196,7 +199,9 @@ export function applyOverlay(
       if (entry.citations) patched.citations = entry.citations;
       if (entry.groups) patched.groups = [...new Set([...patched.groups, ...entry.groups])];
       if (entry.variants) {
-        const byName = new Map(patched.variants.map((v) => [v.name, v]));
+        const byName = new Map(
+          entry.replaceVariants ? [] : patched.variants.map((v) => [v.name, v]),
+        );
         for (const v of entry.variants) byName.set(v.name, v);
         // A curated variant matching the primary name replaces nothing; drop it.
         byName.delete(patched.primaryName);

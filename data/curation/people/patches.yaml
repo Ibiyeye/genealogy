@@ -26,6 +26,22 @@
   variants:
     - { name: Shallum, kind: birth, citations: ["1Chr 3:15", "Jer 22:11"] }
 
+- id: jesus_905
+  # The import lists 26 "alsoCalled" values that are messianic titles, not
+  # spellings — including KJV all-caps duplicates (LORD/Lord, BRANCH/Branch)
+  # and sentence fragments (Holy, Sun, Star). Replaced with the titles worth
+  # showing, correctly typed.
+  replaceVariants: true
+  variants:
+    - { name: Christ, kind: title, citations: ["Matt 16:16"] }
+    - { name: Messiah, kind: title, citations: ["John 1:41"] }
+    - { name: Immanuel, kind: title, citations: ["Isa 7:14", "Matt 1:23"] }
+    - { name: "Son of David", kind: title, citations: ["Matt 1:1"] }
+    - { name: "Son of Man", kind: title, citations: ["Dan 7:13"] }
+    - { name: "Prince of Peace", kind: title, citations: ["Isa 9:6"] }
+    - { name: "Word", kind: title, citations: ["John 1:1"] }
+    - { name: "Lamb of God", kind: title, citations: ["John 1:29"] }
+
 - id: joshua_1727
   variants:
     - { name: Hoshea, kind: birth, citations: ["Num 13:16"] }

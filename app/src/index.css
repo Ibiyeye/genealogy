@@ -481,3 +481,23 @@ a { color: var(--link); }
   }
   .hero { padding: 3rem 0; }
 }
+
+/* variant name lines */
+.variants-block { margin: 0.6rem 0 0; }
+.variants-line { margin: 0.25rem 0; font-size: 0.95rem; }
+.variants-line em { font-style: normal; color: var(--text); }
+.variant-kind {
+  color: var(--text-dim);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.variant-cite { color: var(--text-dim); font-size: 0.8rem; }
+.variants-more {
+  background: none;
+  border: none;
+  color: var(--link);
+  font-size: 0.85rem;
+  text-decoration: underline;
+  padding: 0.25rem 0.4rem;
+}
