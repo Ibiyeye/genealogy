@@ -43,6 +43,28 @@ export function LineageView({ id }: { id: string }): React.ReactElement {
         <p className="page-hint">Tap a person for their full family.</p>
       </header>
 
+      {line.kind === "group" ? (
+        <div className="group-grid">
+          {line.people.map((step) => {
+            const person = dataset.persons.get(step.id);
+            if (!person) return null;
+            const years = lifespanLabel(dataset, step.id);
+            return (
+              <button
+                key={step.id}
+                className="person-card"
+                onClick={() => navigate({ name: "person", id: step.id })}
+              >
+                <span className="person-card-name">{person.primaryName}</span>
+                {person.disambiguator && (
+                  <span className="person-card-sub">{person.disambiguator}</span>
+                )}
+                {years && <span className="person-card-years">{years}</span>}
+              </button>
+            );
+          })}
+        </div>
+      ) : (
       <ol className="chain">
         {line.people.map((step, i) => {
           const person = dataset.persons.get(step.id);
@@ -134,6 +156,7 @@ export function LineageView({ id }: { id: string }): React.ReactElement {
           );
         })}
       </ol>
+      )}
     </div>
   );
 }

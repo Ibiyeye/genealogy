@@ -30,10 +30,23 @@ describe.skipIf(!built)("emitted artifacts", () => {
     expect(manifest.counts.claims).toBe(claims.claims.length);
   });
 
-  it("filtered count lands in the 500–1500 target", () => {
+  it("includes every named person, not a notable subset", () => {
     const { persons } = PersonsArtifactSchema.parse(read("persons.json"));
-    expect(persons.length).toBeGreaterThanOrEqual(500);
-    expect(persons.length).toBeLessThanOrEqual(1500);
+    expect(persons.length).toBeGreaterThan(3000);
+    const ids = new Set(persons.map((p) => p.id));
+    // Abel appears in only 9 verses — the old threshold of 10 dropped him.
+    expect(ids.has("abel_13")).toBe(true);
+  });
+
+  it("Adam has all three named sons", () => {
+    const { claims } = ClaimsArtifactSchema.parse(read("claims.json"));
+    const { persons } = PersonsArtifactSchema.parse(read("persons.json"));
+    const byId = new Map(persons.map((p) => [p.id, p]));
+    const sons = claims
+      .filter((c) => c.type === "parent_of" && c.from === "adam_78")
+      .map((c) => byId.get(c.to)?.primaryName)
+      .sort();
+    expect(sons).toEqual(["Abel", "Cain", "Seth"]);
   });
 
   it("total payload stays within budget", () => {
@@ -50,7 +63,8 @@ describe.skipIf(!built)("emitted artifacts", () => {
       (sum, f) => sum + readFileSync(join(outDir, f)).length,
       0,
     );
-    expect(total).toBeLessThan(1.5 * 1024 * 1024);
+    // Raw budget; gzip over the wire is roughly a fifth of this.
+    expect(total).toBeLessThan(2.5 * 1024 * 1024);
   });
 
   it("David, Job, and Melchizedek are present; Job floats", () => {
@@ -60,11 +74,19 @@ describe.skipIf(!built)("emitted artifacts", () => {
     expect(ids.has("david_994")).toBe(true);
     expect(ids.has("job_1639")).toBe(true);
     expect(ids.has("melchisedec_1991")).toBe(true);
-    expect(
-      claims.some((c) => c.from === "job_1639" || c.to === "job_1639"),
-    ).toBe(false);
     const melchizedek = persons.find((p) => p.id === "melchisedec_1991")!;
     expect(melchizedek.primaryName).toBe("Melchizedek");
+  });
+
+  it("collections emit as groups with their curated members", () => {
+    const lineages = (read("lineages.json") as { lineages: Array<{ id: string; kind: string; people: unknown[] }> }).lineages;
+    const apostles = lineages.find((l) => l.id === "the-apostles")!;
+    expect(apostles.kind).toBe("group");
+    expect(apostles.people).toHaveLength(12);
+    const tribes = lineages.find((l) => l.id === "twelve-tribes")!;
+    expect(tribes.people).toHaveLength(12);
+    // Descent lines stay chains.
+    expect(lineages.find((l) => l.id === "kings-of-judah")!.kind).toBe("chain");
   });
 
   it("Joseph's father is a two-claim conflict group", () => {

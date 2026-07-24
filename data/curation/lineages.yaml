@@ -51,3 +51,83 @@
     path than Matthew's, preserved here side by side rather than harmonized.
   citation: Luke 3:23-31
   waypoints: [david_994, nathan_2152, heli_1484, jesus_905]
+
+# --- Collections: sets of people, not descent chains ---
+
+- id: twelve-tribes
+  kind: group
+  title: The Twelve Tribes
+  subtitle: The sons of Jacob
+  description: Jacob's sons, whose descendants became the tribes of Israel.
+    Levi received no land but the priesthood; Joseph's portion passed to his
+    sons Ephraim and Manasseh.
+  citation: Gen 35:23-26
+  members:
+    - reuben_2429
+    - simeon_2741
+    - levi_1820
+    - judah_1751
+    - dan_973
+    - naphtali_2149
+    - gad_1262
+    - asher_337
+    - issachar_645
+    - zebulun_3002
+    - joseph_1710
+    - benjamin_463
+
+- id: the-prophets
+  kind: group
+  title: The Prophets
+  subtitle: Speakers for God, from Moses to Malachi
+  description: Prophets who left written books, alongside those known only
+    through the narrative — Elijah and Elisha, Samuel, Nathan, and the
+    prophetesses Miriam, Deborah, and Huldah.
+  citation: Heb 1:1
+  members:
+    - moses_2108
+    - miriam_2087
+    - deborah_997
+    - samuel_2469
+    - nathan_2153
+    - elijah_1131
+    - elisha_1153
+    - jonah_1689
+    - amos_238
+    - hosea_1555
+    - isaiah_617
+    - micah_2053
+    - huldah_1567
+    - nahum_2145
+    - zephaniah_3040
+    - habakkuk_1334
+    - jeremiah_853
+    - ezekiel_1237
+    - obadiah_2226
+    - daniel_975
+    - joel_1660
+    - haggai_1349
+    - zechariah_3016
+    - malachi_1899
+
+- id: the-apostles
+  kind: group
+  title: The Twelve Apostles
+  subtitle: Those Jesus sent out
+  description: The twelve Jesus called and sent. Lists differ slightly between
+    the Gospels — Lebbaeus is also called Thaddaeus, and Judas Iscariot was
+    later replaced by Matthias.
+  citation: Matt 10:2-4
+  members:
+    - peter_2745
+    - andrew_264
+    - james_718
+    - john_1677
+    - philip_2344
+    - bartholomew_405
+    - thomas_2851
+    - matthew_1971
+    - james_719
+    - lebbaeus_1815
+    - simon_2746
+    - judas_1760

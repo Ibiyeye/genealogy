@@ -122,7 +122,11 @@ export async function runOverlayValidateEmit(input: Stage456Input): Promise<void
     return json.length;
   };
 
-  const persons = [...merged.persons.values()].sort((a, b) => a.id.localeCompare(b.id));
+  // `sourceIds` is build-time provenance the client never reads; stripping it
+  // from the artifact saves ~60KB across 3,000 people.
+  const persons = [...merged.persons.values()]
+    .sort((a, b) => a.id.localeCompare(b.id))
+    .map(({ sourceIds: _sourceIds, ...rest }) => rest);
   const claims = [...merged.claims].sort((a, b) => a.id.localeCompare(b.id));
 
   const search = new MiniSearch({

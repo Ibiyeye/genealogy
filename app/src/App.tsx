@@ -6,8 +6,10 @@ import { LineageView } from "./views/LineageView.js";
 import { PersonView } from "./views/PersonView.js";
 import { AboutView } from "./views/AboutView.js";
 import { SearchOverlay } from "./views/SearchOverlay.js";
+import { useDocumentTitle } from "./useDocumentTitle.js";
 
 export function App(): React.ReactElement {
+  useDocumentTitle();
   const dataset = useStore((s) => s.dataset);
   const loadError = useStore((s) => s.loadError);
   const route = useStore((s) => s.route);

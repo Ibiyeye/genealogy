@@ -38,6 +38,8 @@ export const LineageSchema = z.object({
   subtitle: z.string(),
   description: z.string(),
   citation: z.string(),
+  /** chain = descent line rendered as a spine; group = an unordered set. */
+  kind: z.enum(["chain", "group"]).default("chain"),
   people: z.array(LineageStepSchema),
 });
 export type Lineage = z.infer<typeof LineageSchema>;

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1c1f27"/>
+      <stop offset="100%" stop-color="#14161c"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- descent spine motif -->
+  <g stroke="#8a7448" stroke-width="3" fill="none" opacity="0.85">
+    <line x1="150" y1="150" x2="150" y2="480"/>
+  </g>
+  <g fill="#c9a86a">
+    <circle cx="150" cy="150" r="9"/>
+    <circle cx="150" cy="260" r="9"/>
+    <circle cx="150" cy="370" r="9"/>
+    <circle cx="150" cy="480" r="9"/>
+  </g>
+  <g stroke="#8a7448" stroke-width="3" fill="none">
+    <path d="M150 260 h44"/>
+    <path d="M150 370 h44"/>
+    <path d="M150 150 h44"/>
+    <path d="M150 480 h44"/>
+  </g>
+  <g fill="#252935" stroke="#333846" stroke-width="2">
+    <rect x="200" y="132" width="150" height="36" rx="8"/>
+    <rect x="200" y="242" width="150" height="36" rx="8"/>
+    <rect x="200" y="352" width="150" height="36" rx="8"/>
+    <rect x="200" y="462" width="150" height="36" rx="8"/>
+  </g>
+  <g fill="#9a96a0" font-family="Georgia, serif" font-size="17">
+    <text x="216" y="156">Adam</text>
+    <text x="216" y="266">Seth</text>
+    <text x="216" y="376">Enos</text>
+    <text x="216" y="486">Cainan</text>
+  </g>
+
+  <text x="430" y="250" font-family="Georgia, 'Times New Roman', serif" font-size="82"
+        font-weight="600" fill="#c9a86a" letter-spacing="2">Biblekin</text>
+  <text x="432" y="316" font-family="Georgia, serif" font-size="34" fill="#e6e2d8">
+    The families of the Bible,
+  </text>
+  <text x="432" y="362" font-family="Georgia, serif" font-size="34" fill="#e6e2d8">
+    one line at a time
+  </text>
+  <text x="432" y="432" font-family="Georgia, serif" font-size="23" fill="#9a96a0">
+    3,067 people · every relationship cited to a verse
+  </text>
+  <text x="432" y="470" font-family="Georgia, serif" font-size="23" fill="#9a96a0">
+    biblekin.net
+  </text>
+</svg>

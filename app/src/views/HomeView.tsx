@@ -1,3 +1,4 @@
+import type { Lineage } from "@genealogy/schema";
 import { useStore } from "../store.js";
 
 export function HomeView(): React.ReactElement {
@@ -23,37 +24,17 @@ export function HomeView(): React.ReactElement {
         </button>
       </section>
 
-      <section className="lineage-section">
-        <h2 className="section-heading">The great family lines</h2>
-        <p className="section-sub">
-          Continuous chains of descent, exactly as the text records them.
-        </p>
-        <div className="lineage-cards">
-          {dataset.lineages.map((line) => {
-            const first = dataset.persons.get(line.people[0]!.id);
-            const last = dataset.persons.get(line.people[line.people.length - 1]!.id);
-            return (
-              <button
-                key={line.id}
-                className="lineage-card"
-                onClick={() => navigate({ name: "lineage", id: line.id })}
-              >
-                <div className="lineage-card-head">
-                  <h3>{line.title}</h3>
-                  <span className="lineage-cite">{line.citation}</span>
-                </div>
-                <p className="lineage-sub">{line.subtitle}</p>
-                <p className="lineage-desc">{line.description}</p>
-                <div className="lineage-endpoints" aria-hidden="true">
-                  <span>{first?.primaryName}</span>
-                  <span className="endpoint-line" />
-                  <span>{last?.primaryName}</span>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </section>
+      <LineageSection
+        heading="The great family lines"
+        sub="Continuous chains of descent, exactly as the text records them."
+        lines={dataset.lineages.filter((l) => l.kind !== "group")}
+      />
+
+      <LineageSection
+        heading="Groups &amp; callings"
+        sub="People gathered by role rather than descent."
+        lines={dataset.lineages.filter((l) => l.kind === "group")}
+      />
 
       <section className="how-section">
         <h2 className="section-heading">How to read it</h2>
@@ -84,5 +65,56 @@ export function HomeView(): React.ReactElement {
         </p>
       </footer>
     </div>
+  );
+}
+
+function LineageSection({
+  heading,
+  sub,
+  lines,
+}: {
+  heading: string;
+  sub: string;
+  lines: Lineage[];
+}): React.ReactElement | null {
+  const dataset = useStore((s) => s.dataset)!;
+  const navigate = useStore((s) => s.navigate);
+  if (lines.length === 0) return null;
+  return (
+    <section className="lineage-section">
+      <h2 className="section-heading">{heading}</h2>
+      <p className="section-sub">{sub}</p>
+      <div className="lineage-cards">
+        {lines.map((line) => {
+            const first = dataset.persons.get(line.people[0]!.id);
+            const last = dataset.persons.get(line.people[line.people.length - 1]!.id);
+            return (
+              <button
+                key={line.id}
+                className="lineage-card"
+                onClick={() => navigate({ name: "lineage", id: line.id })}
+              >
+                <div className="lineage-card-head">
+                  <h3>{line.title}</h3>
+                  <span className="lineage-cite">{line.citation}</span>
+                </div>
+                <p className="lineage-sub">{line.subtitle}</p>
+                <p className="lineage-desc">{line.description}</p>
+                {line.kind === "group" ? (
+                  <div className="lineage-endpoints" aria-hidden="true">
+                    <span className="group-count">{line.people.length} people</span>
+                  </div>
+                ) : (
+                  <div className="lineage-endpoints" aria-hidden="true">
+                    <span>{first?.primaryName}</span>
+                    <span className="endpoint-line" />
+                    <span>{last?.primaryName}</span>
+                  </div>
+                )}
+              </button>
+            );
+          })}
+      </div>
+    </section>
   );
 }

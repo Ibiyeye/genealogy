@@ -98,6 +98,8 @@ export function PersonView({ id }: { id: string }): React.ReactElement {
         {person.variants.length > 0 && <VariantLines variants={person.variants} />}
       </header>
 
+      {person.bio && <p className="person-bio">{person.bio}</p>}
+
       {parentConflicts.size > 0 &&
         [...parentConflicts].map((group) => {
           const claims = dataset.conflictGroups.get(group) ?? [];

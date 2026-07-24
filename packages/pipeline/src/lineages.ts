@@ -12,14 +12,31 @@ import { z } from "zod";
 import type { Claim, PersonId } from "@genealogy/schema";
 import { PIPELINE_CONFIG } from "./config.js";
 
-const LineageSpecSchema = z.object({
-  id: z.string().min(1),
-  title: z.string().min(1),
-  subtitle: z.string().min(1),
-  description: z.string().min(1),
-  citation: z.string().min(1),
-  waypoints: z.array(z.string().min(1)).min(2),
-});
+/**
+ * Two shapes of collection:
+ *   chain — a descent line, walked between waypoints over parent_of
+ *   group — an explicit set (the twelve apostles, the writing prophets),
+ *           which has no descent relationship between members
+ */
+const LineageSpecSchema = z
+  .object({
+    id: z.string().min(1),
+    title: z.string().min(1),
+    subtitle: z.string().min(1),
+    description: z.string().min(1),
+    citation: z.string().min(1),
+    kind: z.enum(["chain", "group"]).default("chain"),
+    waypoints: z.array(z.string().min(1)).min(2).optional(),
+    members: z.array(z.string().min(1)).min(2).optional(),
+  })
+  .superRefine((spec, ctx) => {
+    if (spec.kind === "chain" && !spec.waypoints) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: `${spec.id}: chain needs waypoints` });
+    }
+    if (spec.kind === "group" && !spec.members) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: `${spec.id}: group needs members` });
+    }
+  });
 const LineagesFileSchema = z.array(LineageSpecSchema);
 
 export interface LineageStep {
@@ -34,6 +51,7 @@ export interface Lineage {
   subtitle: string;
   description: string;
   citation: string;
+  kind: "chain" | "group";
   people: LineageStep[];
 }
 
@@ -109,16 +127,40 @@ export function buildLineages(
 
   const lineages: Lineage[] = [];
   for (const spec of specs) {
-    for (const wp of spec.waypoints) {
+    const meta = {
+      id: spec.id,
+      title: spec.title,
+      subtitle: spec.subtitle,
+      description: spec.description,
+      citation: spec.citation,
+      kind: spec.kind,
+    };
+
+    if (spec.kind === "group") {
+      const members = spec.members ?? [];
+      for (const m of members) {
+        if (!personExists(m)) {
+          errors.push(`collection ${spec.id}: member "${m}" is not in the dataset`);
+        }
+      }
+      lineages.push({
+        ...meta,
+        people: members.map((id) => ({ id, claim: null })),
+      });
+      continue;
+    }
+
+    const waypoints = spec.waypoints ?? [];
+    for (const wp of waypoints) {
       if (!personExists(wp)) {
         errors.push(`lineage ${spec.id}: waypoint "${wp}" is not in the dataset`);
       }
     }
     const people: LineageStep[] = [];
     let ok = true;
-    for (let i = 0; i < spec.waypoints.length - 1; i++) {
-      const from = spec.waypoints[i]!;
-      const to = spec.waypoints[i + 1]!;
+    for (let i = 0; i < waypoints.length - 1; i++) {
+      const from = waypoints[i]!;
+      const to = waypoints[i + 1]!;
       const segment = shortestPath(from, to);
       if (!segment) {
         errors.push(`lineage ${spec.id}: no descent path ${from} → ${to}`);
@@ -128,16 +170,7 @@ export function buildLineages(
       // Skip the segment head when appending (it's the previous tail).
       people.push(...(people.length === 0 ? segment : segment.slice(1)));
     }
-    if (ok) {
-      lineages.push({
-        id: spec.id,
-        title: spec.title,
-        subtitle: spec.subtitle,
-        description: spec.description,
-        citation: spec.citation,
-        people,
-      });
-    }
+    if (ok) lineages.push({ ...meta, people });
   }
   return { lineages, errors };
 }

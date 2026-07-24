@@ -222,7 +222,7 @@ describe("lineage walking", async () => {
     mk("c4", "parent_of", "b", "e"), // side branch
   ];
   const spec = {
-    id: "test", title: "T", subtitle: "s", description: "d", citation: "Gen 1",
+    id: "test", title: "T", subtitle: "s", description: "d", citation: "Gen 1", kind: "chain" as const,
     waypoints: ["a", "d"],
   };
 
