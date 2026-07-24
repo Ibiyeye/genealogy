@@ -499,5 +499,8 @@ a { color: var(--link); }
   color: var(--link);
   font-size: 0.85rem;
   text-decoration: underline;
-  padding: 0.25rem 0.4rem;
+  /* Inline in flowing text: pad out to a 44px tap target, then pull the
+     extra height back with negative margin so the line box is unchanged. */
+  padding: 0.75rem 0.5rem;
+  margin: -0.75rem 0;
 }
