@@ -1,0 +1,10 @@
+// Cloudflare Workers config: assets-only static site.
+// The build (pnpm build:site) outputs the app to app/dist; this tells
+// `wrangler deploy` to publish that directory as static assets.
+{
+  "name": "genealogy",
+  "compatibility_date": "2026-07-01",
+  "assets": {
+    "directory": "./app/dist"
+  }
+}
