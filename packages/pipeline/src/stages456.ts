@@ -10,6 +10,7 @@ import type { TheoRawExtras } from "./ingest.js";
 import type { TheoPeopleGroup } from "./theographic.js";
 import { PIPELINE_CONFIG } from "./config.js";
 import { loadOverlay, applyOverlay } from "./overlay.js";
+import { loadLineageSpecs, buildLineages } from "./lineages.js";
 import { validate } from "./validate.js";
 import { readVendored, THEOGRAPHIC_COMMIT } from "./vendor.js";
 
@@ -84,6 +85,17 @@ export async function runOverlayValidateEmit(input: Stage456Input): Promise<void
   }
   const layers = [theographicLayer, ...merged.layers];
 
+  // Lineages: walk the curated great family lines over the merged claims.
+  const lineageSpecs = loadLineageSpecs();
+  const lineageResult = buildLineages(lineageSpecs, merged.claims, (id) =>
+    merged.persons.has(id),
+  );
+  console.log(
+    `lineages: ${lineageResult.lineages.length}/${lineageSpecs.length} walked (` +
+      lineageResult.lineages.map((l) => `${l.id}:${l.people.length}`).join(", ") +
+      `)`,
+  );
+
   // Stage 5 — validate
   const result = validate({
     persons: merged.persons,
@@ -91,6 +103,7 @@ export async function runOverlayValidateEmit(input: Stage456Input): Promise<void
     anchors: merged.anchors,
     layers,
   });
+  result.errors.push(...lineageResult.errors);
   for (const w of result.warnings) console.warn(`  ⚠ ${w}`);
   if (result.errors.length > 0) {
     for (const e of result.errors) console.error(`  ✗ ${e}`);
@@ -133,6 +146,7 @@ export async function runOverlayValidateEmit(input: Stage456Input): Promise<void
     total += write(`chronology.${layer.id}.json`, layer);
   }
   total += write("anchors.json", { anchors: merged.anchors });
+  total += write("lineages.json", { lineages: lineageResult.lineages });
   total += write("search-index.json", search.toJSON());
 
   const conflictGroups = new Set(claims.map((c) => c.conflictGroup).filter(Boolean));

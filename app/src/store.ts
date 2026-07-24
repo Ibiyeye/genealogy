@@ -1,116 +1,84 @@
 import { create } from "zustand";
-import type { ChronologyLayer, ClaimType, PersonId } from "@genealogy/schema";
 import type { Dataset } from "./data/loadDataset.js";
-import { loadChronologyLayer } from "./data/loadDataset.js";
 
-/** Claim types shown by default; the rest sit behind filter chips. */
-export const DEFAULT_VISIBLE_TYPES: ClaimType[] = [
-  "parent_of",
-  "ancestor_of",
-  "spouse_of",
-  "concubine_of",
-];
+/**
+ * Hash-based routing so the browser back button works everywhere
+ * (including as an installed mobile web app):
+ *   #/            home
+ *   #/line/<id>   lineage view
+ *   #/p/<id>      person view
+ *   #/about       about page
+ */
+export type Route =
+  | { name: "home" }
+  | { name: "lineage"; id: string }
+  | { name: "person"; id: string }
+  | { name: "about" };
 
-export const ALL_CLAIM_TYPES: ClaimType[] = [
-  "parent_of",
-  "ancestor_of",
-  "spouse_of",
-  "concubine_of",
-  "adopted_by",
-  "succeeded_by",
-  "mentored_by",
-  "contemporary_of",
-  "sibling_of",
-];
+export function parseHash(hash: string): Route {
+  const parts = hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+  if (parts[0] === "line" && parts[1]) return { name: "lineage", id: parts[1] };
+  if (parts[0] === "p" && parts[1]) return { name: "person", id: parts[1] };
+  if (parts[0] === "about") return { name: "about" };
+  return { name: "home" };
+}
+
+export function routeToHash(route: Route): string {
+  switch (route.name) {
+    case "home":
+      return "#/";
+    case "lineage":
+      return `#/line/${route.id}`;
+    case "person":
+      return `#/p/${route.id}`;
+    case "about":
+      return "#/about";
+  }
+}
 
 interface AppState {
   dataset: Dataset | null;
   loadError: string | null;
-
-  focusId: PersonId | null;
-  selectedId: PersonId | null;
-  expandedIds: ReadonlySet<PersonId>;
-  generationDepth: number;
-  breadcrumbs: PersonId[];
-
-  chronologyLayerId: string;
-  layers: Record<string, ChronologyLayer>;
-
-  visibleClaimTypes: ReadonlySet<ClaimType>;
+  route: Route;
+  searchOpen: boolean;
 
   setDataset(dataset: Dataset): void;
   setLoadError(message: string): void;
-  select(id: PersonId | null): void;
-  /** Focus recenters the graph; selection follows. */
-  focus(id: PersonId): void;
-  expand(id: PersonId): void;
-  resetExpansion(): void;
-  setGenerationDepth(depth: number): void;
-  setChronologyLayer(id: string): Promise<void>;
-  toggleClaimType(type: ClaimType): void;
-  registerLayer(layer: ChronologyLayer): void;
+  /** Push a new route (adds a history entry; back button returns). */
+  navigate(route: Route): void;
+  /** Called by the hashchange listener — sync only, no push. */
+  syncRoute(route: Route): void;
+  openSearch(open: boolean): void;
 }
 
-export const useStore = create<AppState>((set, get) => ({
+export const useStore = create<AppState>((set) => ({
   dataset: null,
   loadError: null,
-  focusId: null,
-  selectedId: null,
-  expandedIds: new Set<PersonId>(),
-  generationDepth: 2,
-  breadcrumbs: [],
-  chronologyLayerId: "theographic",
-  layers: {},
-  visibleClaimTypes: new Set(DEFAULT_VISIBLE_TYPES),
+  route: parseHash(typeof window !== "undefined" ? window.location.hash : ""),
+  searchOpen: false,
 
   setDataset: (dataset) => set({ dataset }),
   setLoadError: (loadError) => set({ loadError }),
 
-  select: (id) => set({ selectedId: id }),
-
-  focus: (id) => {
-    const { focusId, breadcrumbs } = get();
-    const crumbs =
-      focusId && focusId !== id
-        ? [...breadcrumbs.filter((b) => b !== focusId && b !== id), focusId].slice(-6)
-        : breadcrumbs.filter((b) => b !== id);
-    set({
-      focusId: id,
-      selectedId: id,
-      breadcrumbs: crumbs,
-      expandedIds: new Set<PersonId>(),
-    });
-  },
-
-  expand: (id) => {
-    const next = new Set(get().expandedIds);
-    next.add(id);
-    set({ expandedIds: next });
-  },
-
-  resetExpansion: () => set({ expandedIds: new Set<PersonId>() }),
-
-  setGenerationDepth: (depth) =>
-    set({ generationDepth: Math.min(3, Math.max(1, depth)) }),
-
-  setChronologyLayer: async (id) => {
-    const { layers, dataset } = get();
-    if (!layers[id]) {
-      const meta = dataset?.manifest.chronologyLayers.find((l) => l.id === id);
-      if (!meta) return;
-      const layer = await loadChronologyLayer(meta.file);
-      set((s) => ({ layers: { ...s.layers, [id]: layer } }));
+  navigate: (route) => {
+    const hash = routeToHash(route);
+    if (window.location.hash !== hash) {
+      window.location.hash = hash; // fires hashchange → syncRoute
     }
-    set({ chronologyLayerId: id });
+    set({ route, searchOpen: false });
+    window.scrollTo({ top: 0 });
   },
 
-  toggleClaimType: (type) => {
-    const next = new Set(get().visibleClaimTypes);
-    if (next.has(type)) next.delete(type);
-    else next.add(type);
-    set({ visibleClaimTypes: next });
+  syncRoute: (route) => {
+    set({ route, searchOpen: false });
+    window.scrollTo({ top: 0 });
   },
 
-  registerLayer: (layer) =>
-    set((s) => ({ layers: { ...s.layers, [layer.id]: layer } })),
+  openSearch: (open) => set({ searchOpen: open }),
 }));
+
+if (typeof window !== "undefined") {
+  window.addEventListener("hashchange", () => {
+    useStore.getState().syncRoute(parseHash(window.location.hash));
+  });
+}

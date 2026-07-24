@@ -27,6 +27,23 @@ export const AnchorsArtifactSchema = z.object({
 });
 export type AnchorsArtifact = z.infer<typeof AnchorsArtifactSchema>;
 
+export const LineageStepSchema = z.object({
+  id: z.string(),
+  /** Claim id linking the previous member to this one; null for the head. */
+  claim: z.string().nullable(),
+});
+export const LineageSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  subtitle: z.string(),
+  description: z.string(),
+  citation: z.string(),
+  people: z.array(LineageStepSchema),
+});
+export type Lineage = z.infer<typeof LineageSchema>;
+export const LineagesArtifactSchema = z.object({ lineages: z.array(LineageSchema) });
+export type LineagesArtifact = z.infer<typeof LineagesArtifactSchema>;
+
 export const ManifestSchema = z.object({
   datasetVersion: z.string(),
   generatedAt: z.string(),

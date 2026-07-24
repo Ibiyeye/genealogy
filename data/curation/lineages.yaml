@@ -1,0 +1,53 @@
+# The great family lines, planned from dataset study (all verified
+# continuous over parent_of claims). The pipeline walks each chain through
+# its waypoints and emits lineages.json with per-step claims for citations.
+# Order here = display order on the home screen.
+- id: line-of-promise
+  title: The Line of Promise
+  subtitle: Adam to Noah · 10 generations
+  description: From creation to the flood through Seth, as recorded in Genesis 5.
+  citation: Gen 5
+  waypoints: [adam_78, noah_2210]
+
+- id: after-the-flood
+  title: After the Flood
+  subtitle: Noah to Abraham · 11 generations
+  description: The line of Shem from the flood to the call of Abraham.
+  citation: Gen 11
+  waypoints: [noah_2210, abraham_58]
+
+- id: the-patriarchs
+  title: The Patriarchs
+  subtitle: Abraham to Joseph · 4 generations
+  description: Abraham, Isaac, and Jacob — whose twelve sons became the tribes of Israel.
+  citation: Gen 21
+  waypoints: [abraham_58, joseph_1710]
+
+- id: judah-to-david
+  title: Judah to David
+  subtitle: 11 generations
+  description: The tribe of Judah down to Israel's greatest king, through Boaz and Ruth.
+  citation: Ruth 4:18-22
+  waypoints: [judah_1751, david_994]
+
+- id: kings-of-judah
+  title: The Kings of Judah
+  subtitle: David to the exile · 18 generations
+  description: The royal house of David, from the united kingdom to the Babylonian exile.
+  citation: 1Chr 3:10-16
+  waypoints: [david_994, josiah_1730, zedekiah_1950]
+
+- id: royal-line-to-jesus
+  title: The Royal Line to Jesus
+  subtitle: "Matthew's genealogy · 32 generations"
+  description: Matthew traces Jesus through Solomon and the kings to Joseph.
+  citation: Matt 1:6-16
+  waypoints: [david_994, solomon_2762, jesus_905]
+
+- id: lukan-line-to-jesus
+  title: "Luke's Line to Jesus"
+  subtitle: "Luke's genealogy · 43 generations"
+  description: Luke traces the line through David's son Nathan to Heli — a different
+    path than Matthew's, preserved here side by side rather than harmonized.
+  citation: Luke 3:23-31
+  waypoints: [david_994, nathan_2152, heli_1484, jesus_905]

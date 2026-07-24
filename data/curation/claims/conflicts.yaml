@@ -51,3 +51,26 @@
       note: >-
         The second Cainan appears in the Septuagint and Luke's genealogy but
         is absent from the Masoretic Text of Gen 11:12.
+
+- group: cg_zerubbabel-father
+  about: "Father of Zerubbabel: Pedaiah (1Chr 3:19 MT) vs Shealtiel (Ezra 3:2; Hag 1:1; Matt 1:12)"
+  retract: [thg_parent_pedaiah_2293_zerubbabel_3054]
+  claims:
+    - id: clm_zerubbabel-father-pedaiah
+      type: parent_of
+      from: pedaiah_2293
+      to: zerubbabel_3054
+      citations: ["1Chr 3:19"]
+      source: { tradition: MT, document: "Chronicles genealogy (Masoretic Text)" }
+      confidence: explicit
+    - id: clm_zerubbabel-father-shealtiel
+      type: parent_of
+      from: shealtiel_2456
+      to: zerubbabel_3054
+      citations: ["Ezra 3:2", "Hag 1:1", "Matt 1:12"]
+      source: { tradition: NT, document: "Ezra, Haggai, and the Matthean genealogy" }
+      confidence: explicit
+      note: >-
+        Chronicles names Pedaiah as father; Ezra, Haggai, and Matthew name
+        his brother Shealtiel — possibly a levirate marriage. Both readings
+        are preserved.

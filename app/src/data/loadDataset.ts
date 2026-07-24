@@ -1,7 +1,9 @@
 import MiniSearch from "minisearch";
 import type {
+  Anchor,
   Claim,
   ChronologyLayer,
+  Lineage,
   Manifest,
   Person,
   PersonId,
@@ -21,6 +23,10 @@ export interface Dataset {
   /** Every claim touching a person, both directions. */
   claimsByPerson: Map<PersonId, Claim[]>;
   conflictGroups: Map<string, Claim[]>;
+  lineages: Lineage[];
+  anchors: Anchor[];
+  /** Default chronology layer (Theographic estimates), loaded eagerly. */
+  years: ChronologyLayer;
   manifest: Manifest;
   search: MiniSearch;
 }
@@ -32,12 +38,19 @@ async function fetchJson<T>(url: string): Promise<T> {
 }
 
 export async function loadDataset(base = "/data"): Promise<Dataset> {
-  const [personsArtifact, claimsArtifact, manifest, searchJson] = await Promise.all([
-    fetchJson<{ persons: Person[] }>(`${base}/persons.json`),
-    fetchJson<{ claims: Claim[] }>(`${base}/claims.json`),
-    fetchJson<Manifest>(`${base}/manifest.json`),
-    fetch(`${base}/search-index.json`).then((r) => r.text()),
-  ]);
+  const manifest = await fetchJson<Manifest>(`${base}/manifest.json`);
+  const defaultLayerMeta = manifest.chronologyLayers.find(
+    (l) => l.id === manifest.defaultChronologyLayer,
+  );
+  const [personsArtifact, claimsArtifact, lineagesArtifact, anchorsArtifact, years, searchJson] =
+    await Promise.all([
+      fetchJson<{ persons: Person[] }>(`${base}/persons.json`),
+      fetchJson<{ claims: Claim[] }>(`${base}/claims.json`),
+      fetchJson<{ lineages: Lineage[] }>(`${base}/lineages.json`),
+      fetchJson<{ anchors: Anchor[] }>(`${base}/anchors.json`),
+      fetchJson<ChronologyLayer>(`${base}/${defaultLayerMeta?.file ?? "chronology.theographic.json"}`),
+      fetch(`${base}/search-index.json`).then((r) => r.text()),
+    ]);
 
   const persons = new Map(personsArtifact.persons.map((p) => [p.id, p]));
   const claims = claimsArtifact.claims;
@@ -62,12 +75,31 @@ export async function loadDataset(base = "/data"): Promise<Dataset> {
 
   const search = MiniSearch.loadJSON(searchJson, SEARCH_OPTIONS);
 
-  return { persons, claims, claimsById, claimsByPerson, conflictGroups, manifest, search };
+  return {
+    persons,
+    claims,
+    claimsById,
+    claimsByPerson,
+    conflictGroups,
+    lineages: lineagesArtifact.lineages,
+    anchors: anchorsArtifact.anchors,
+    years,
+    manifest,
+    search,
+  };
 }
 
-export async function loadChronologyLayer(
-  file: string,
-  base = "/data",
-): Promise<ChronologyLayer> {
-  return fetchJson<ChronologyLayer>(`${base}/${file}`);
+/** "1085–1015 BC" for dated people, "c. 2100–1900 BC" for floruit ranges. */
+export function lifespanLabel(dataset: Dataset, id: PersonId): string | null {
+  const span = dataset.years.spans[id];
+  if (!span) return null;
+  const fmt = (y: number): string => (y < 0 ? `${-y}` : `AD ${y}`);
+  const era = (y: number): string => (y < 0 ? " BC" : "");
+  if (span.birth !== undefined && span.death !== undefined) {
+    return `${fmt(span.birth)}–${fmt(span.death)}${era(span.death)}`;
+  }
+  if (span.active) {
+    return `c. ${fmt(span.active[0])}–${fmt(span.active[1])}${era(span.active[1])}`;
+  }
+  return null;
 }

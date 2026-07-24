@@ -1,90 +1,83 @@
-import { useEffect, useState } from "react";
-import type { Anchor } from "@genealogy/schema";
-import { loadDataset, loadChronologyLayer } from "./data/loadDataset.js";
+import { useEffect } from "react";
 import { useStore } from "./store.js";
-import { SearchBar } from "./search/SearchBar.js";
-import { DetailPanel } from "./panels/DetailPanel.js";
-import { GraphView } from "./graph/GraphView.js";
-import { TimelineView } from "./timeline/TimelineView.js";
-import { AboutButton, ChronologyToggle, ClaimTypeChips } from "./panels/Controls.js";
+import { loadDataset } from "./data/loadDataset.js";
+import { HomeView } from "./views/HomeView.js";
+import { LineageView } from "./views/LineageView.js";
+import { PersonView } from "./views/PersonView.js";
+import { AboutView } from "./views/AboutView.js";
+import { SearchOverlay } from "./views/SearchOverlay.js";
 
 export function App(): React.ReactElement {
   const dataset = useStore((s) => s.dataset);
   const loadError = useStore((s) => s.loadError);
-  const setDataset = useStore((s) => s.setDataset);
-  const setLoadError = useStore((s) => s.setLoadError);
-  const registerLayer = useStore((s) => s.registerLayer);
-  const [anchors, setAnchors] = useState<Anchor[]>([]);
+  const route = useStore((s) => s.route);
+  const searchOpen = useStore((s) => s.searchOpen);
+  const navigate = useStore((s) => s.navigate);
+  const openSearch = useStore((s) => s.openSearch);
 
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const ds = await loadDataset();
-        if (cancelled) return;
-        const defaultMeta = ds.manifest.chronologyLayers.find(
-          (l) => l.id === ds.manifest.defaultChronologyLayer,
-        );
-        if (defaultMeta) {
-          const layer = await loadChronologyLayer(defaultMeta.file);
-          if (cancelled) return;
-          registerLayer(layer);
-        }
-        setDataset(ds);
-        const anchorsRes = await fetch("/data/anchors.json");
-        if (!cancelled && anchorsRes.ok) {
-          setAnchors(((await anchorsRes.json()) as { anchors: Anchor[] }).anchors);
-        }
-      } catch (err) {
-        if (!cancelled) setLoadError(err instanceof Error ? err.message : String(err));
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [setDataset, setLoadError, registerLayer]);
+    loadDataset()
+      .then((d) => useStore.getState().setDataset(d))
+      .catch((err) => useStore.getState().setLoadError(String(err)));
+  }, []);
 
   if (loadError) {
     return (
       <div className="app-error">
-        <h1>Failed to load dataset</h1>
-        <p>{loadError}</p>
-        <p>
-          Run <code>pnpm build:data</code> to generate <code>app/public/data/</code>.
-        </p>
+        <div>
+          <p>The dataset failed to load.</p>
+          <p><code>{loadError}</code></p>
+        </div>
       </div>
     );
   }
 
-  if (!dataset) {
-    return <div className="app-loading">Loading dataset…</div>;
-  }
-
   return (
     <div className="app">
-      <header className="app-header">
-        <h1 className="app-title">Biblical Genealogy Explorer</h1>
-        <SearchBar />
-        <ChronologyToggle />
-        <div className="header-meta">
-          {dataset.manifest.counts.persons.toLocaleString()} people ·{" "}
-          {dataset.manifest.counts.claims.toLocaleString()} relationships
-          <AboutButton />
-        </div>
+      <header className="topbar">
+        {route.name !== "home" ? (
+          <button
+            className="topbar-btn"
+            aria-label="Go back"
+            onClick={() => history.back()}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        ) : (
+          <span className="topbar-spacer" />
+        )}
+        <button className="wordmark" onClick={() => navigate({ name: "home" })}>
+          Biblekin
+        </button>
+        <button
+          className="topbar-btn"
+          aria-label="Search people"
+          onClick={() => openSearch(true)}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" strokeWidth="2.2" />
+            <path d="M15.5 15.5L21 21" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+          </svg>
+        </button>
       </header>
-      <div className="subheader">
-        <span className="subheader-label" title="Toggle which relationship types are drawn as lines in the graph">
-          Show relationships:
-        </span>
-        <ClaimTypeChips />
-      </div>
-      <main className="app-main">
-        <section className="views">
-          <GraphView />
-          <TimelineView />
-        </section>
-        <DetailPanel anchors={anchors} />
+
+      <main className="content">
+        {!dataset ? (
+          <div className="app-loading"><p>Loading the genealogy…</p></div>
+        ) : route.name === "home" ? (
+          <HomeView />
+        ) : route.name === "lineage" ? (
+          <LineageView id={route.id} />
+        ) : route.name === "person" ? (
+          <PersonView id={route.id} />
+        ) : (
+          <AboutView />
+        )}
       </main>
+
+      {searchOpen && dataset && <SearchOverlay />}
     </div>
   );
 }

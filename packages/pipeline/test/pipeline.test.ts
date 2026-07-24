@@ -207,3 +207,47 @@ describe("notability + chain contraction", () => {
     expect(inGenealogyChapter(["1Chr 12:2"], { "1Chr": [[1, 9]] })).toBe(false);
   });
 });
+
+describe("lineage walking", async () => {
+  const { buildLineages } = await import("../src/lineages.js");
+  const mk = (id: string, type: "parent_of" | "ancestor_of", from: string, to: string) => ({
+    id, type, from, to, citations: [],
+    source: { tradition: "theographic" as const }, confidence: "inferred" as const,
+  });
+  const claims = [
+    mk("c1", "parent_of", "a", "b"),
+    mk("c2", "parent_of", "b", "c"),
+    mk("c3", "parent_of", "c", "d"),
+    mk("shortcut", "ancestor_of", "a", "d"),
+    mk("c4", "parent_of", "b", "e"), // side branch
+  ];
+  const spec = {
+    id: "test", title: "T", subtitle: "s", description: "d", citation: "Gen 1",
+    waypoints: ["a", "d"],
+  };
+
+  it("prefers complete parent chains over ancestor_of shortcuts", () => {
+    const r = buildLineages([spec], claims as never, () => true);
+    expect(r.errors).toEqual([]);
+    expect(r.lineages[0]!.people.map((p) => p.id)).toEqual(["a", "b", "c", "d"]);
+    expect(r.lineages[0]!.people[1]!.claim).toBe("c1");
+  });
+
+  it("falls back to shortcuts when no parent chain exists", () => {
+    const r = buildLineages(
+      [spec],
+      claims.filter((c) => c.id !== "c2") as never,
+      () => true,
+    );
+    expect(r.lineages[0]!.people.map((p) => p.id)).toEqual(["a", "d"]);
+  });
+
+  it("errors on unreachable waypoints", () => {
+    const r = buildLineages(
+      [{ ...spec, waypoints: ["d", "a"] }],
+      claims as never,
+      () => true,
+    );
+    expect(r.errors.some((e) => e.includes("no descent path"))).toBe(true);
+  });
+});
